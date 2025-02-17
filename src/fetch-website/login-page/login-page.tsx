@@ -1,34 +1,62 @@
-import React from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import PetsIcon from "@mui/icons-material/Pets";
 import { PrimaryButton, SecondaryButton } from "../common-components/buttons";
 import { TextField } from "@mui/material";
+import { postAuthLogin } from "./apis/post-auth-login";
+import { PrimaryField } from "../common-components/primary-field";
 
-export const LoginPage = () => {
+type Props = {
+  setIsLoginSuccess: Dispatch<SetStateAction<boolean>>;
+};
+
+export const LoginPage = ({ setIsLoginSuccess }: Props) => {
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [isLoginError, setIsLoginError] = useState<boolean>(false);
+
+  const onSubmit = () => {
+    if (!name || !email) {
+      setIsLoginError(true);
+    } else {
+      postAuthLogin(name, email)
+        .then((res) => {
+          setIsLoginSuccess(res.isSuccess);
+          setIsLoginError(!res.isSuccess);
+        })
+        .catch(() => {
+          setIsLoginSuccess(false);
+          setIsLoginError(true);
+        });
+    }
+  };
+
+  const onReset = () => {
+    setName("");
+    setEmail("");
+    setIsLoginError(false);
+  };
+
   return (
-    <div className="grid p-20 gap-y-12 bg-blue-100 w-128 rounded">
+    <div className="grid py-20 px-28 gap-y-12 bg-blue-100 w-128 rounded">
       <div className="flex mx-auto text-2xl ">
         <PetsIcon fontSize="large" />
         <h1 className="font-bold ml-2 my-auto">Login</h1>
       </div>
-      <TextField
-        required
-        id="username"
-        label="Username"
-        defaultValue="Hello World"
-        variant="filled"
-        color="primary"
+      <PrimaryField
+        label="Name"
+        setString={setName}
+        hasError={isLoginError}
+        value={name}
       />
-      <TextField
-        required
-        id="password"
-        label="Password"
-        defaultValue="Hello World"
-        variant="filled"
-        color="primary"
+      <PrimaryField
+        label="Email"
+        setString={setEmail}
+        hasError={isLoginError}
+        value={email}
       />
       <div className="flex gap-x-4 mx-auto">
-        <PrimaryButton label={"Submit"} onClick={() => {}} />
-        <SecondaryButton label={"Reset"} onClick={() => {}} />
+        <PrimaryButton label={"Submit"} onClick={onSubmit} />
+        <SecondaryButton label={"Reset"} onClick={onReset} />
       </div>
     </div>
   );
