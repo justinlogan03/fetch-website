@@ -7,12 +7,13 @@ export const postAuthLogin = async (
     const authRes = await fetch(
       "https://frontend-take-home-service.fetch.com/auth/login",
       {
-        method: "post",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(authBody),
         credentials: "include",
       }
     );
+
     if (authRes.ok === true && authRes.status === 200) {
       return { isSuccess: true };
     } else {

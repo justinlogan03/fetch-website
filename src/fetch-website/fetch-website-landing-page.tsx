@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { LoginPage } from "./login-page/login-page";
+import { DogSearch } from "./dog-search/dog-search";
 
 export const FetchWebsiteLandingPage = () => {
-  const [isLoginSuccess, setIsLoginSuccess] = useState<boolean>(false);
+  const [isLoginSuccess, setIsLoginSuccess] = useState<boolean>(true); //TODO switch back
   return (
-    <div className=" bg-slate-500 my-auto" style={{ height: "100vh" }}>
+    <div className=" bg-slate-500 my-auto" style={{ minHeight: "100vh" }}>
       {isLoginSuccess ? (
-        <div>success</div>
+        <DogSearch />
       ) : (
         <div className="p-64 my-auto">
           <LoginPage setIsLoginSuccess={setIsLoginSuccess} />
