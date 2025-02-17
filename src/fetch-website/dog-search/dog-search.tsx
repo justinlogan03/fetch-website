@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { SearchBar } from "./search-bar";
-import { DogBreeds, getDogsBreeds } from "./apis/get-dogs-breeds";
-import { Table } from "@mui/material";
-import { getDogsSearch } from "./apis/get-dogs-search";
+
 import { searchDogs } from "./helpers/search-dogs";
 import { DogsObject } from "./apis/get-dogs";
 import DogTable from "./dog-table";
 
 export const DogSearch = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // TODO - build out better loading state
   const [currentDogsResults, setCurrentDogsResults] = useState<DogsObject[]>(
     []
   );

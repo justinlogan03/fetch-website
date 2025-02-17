@@ -1,5 +1,7 @@
 import { ErrorResponse } from "../../types";
 
+// TODO - allow props to maximize search
+
 export type DogSearchResults = {
   resultIds: string[];
   total: number;

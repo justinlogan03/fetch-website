@@ -2,6 +2,8 @@ import { IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import React from "react";
 
+//TODO - connect search bar to table data
+
 export const SearchBar = () => {
   return (
     <Paper

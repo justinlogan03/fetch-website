@@ -22,6 +22,8 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import { DogsObject } from "./apis/get-dogs";
 
+//TODO - clean this up and make helper functions
+
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
     return -1;

@@ -2,6 +2,8 @@ import { ErrorResponse } from "../../types";
 
 export type DogBreeds = string[];
 
+// TODO - add this to initial load and create some type of enum for breeds
+
 export const getDogsBreeds = async (): Promise<ErrorResponse<DogBreeds>> => {
   try {
     const dogsBreedsRes = await fetch(
