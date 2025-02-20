@@ -3,7 +3,7 @@ import { LoginPage } from "./login-page/login-page";
 import { DogSearch } from "./dog-search/dog-search";
 
 export const FetchWebsiteLandingPage = () => {
-  const [isLoginSuccess, setIsLoginSuccess] = useState<boolean>(true); // TODO - switch this back
+  const [isLoginSuccess, setIsLoginSuccess] = useState<boolean>(false); // TODO - switch this back
   return (
     <div className=" bg-slate-500 my-auto" style={{ minHeight: "100vh" }}>
       {isLoginSuccess ? (
