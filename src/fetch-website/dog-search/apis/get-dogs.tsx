@@ -6,7 +6,7 @@ export type DogsObject = {
   id: string;
   img: string;
   name: string;
-  zipCode: string;
+  zip_code: string;
 };
 
 export const getDogs = async (
