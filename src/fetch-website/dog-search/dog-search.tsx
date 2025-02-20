@@ -6,6 +6,8 @@ import { DogTable } from "./dog-table";
 import { getDogsBreeds } from "./apis/get-dogs-breeds";
 import { FilterPanel } from "./dog-table-components.tsx/filter-panel";
 import { DogSearchResults } from "./apis/get-dogs-search";
+import { ImageCell } from "./dog-table-components.tsx/image-cell";
+import { MyFavoritesSection } from "./favorited-dogs";
 
 export const DogSearch = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false); // TODO - build out better loading state
@@ -45,8 +47,14 @@ export const DogSearch = () => {
 
   return (
     <div className="">
-      <div className="mx-auto p-24 flex gap-4">
-        {!isLoading && dogBreedList !== null && (
+      <div className="flex px-24 pt-12">
+        <MyFavoritesSection
+          favoritedDogs={favoritedDogs}
+          setFavoritedDogs={setFavoritedDogs}
+        />
+      </div>
+      <div className="mx-auto px-24 pt-4 pb-12 flex gap-4">
+        {dogBreedList !== null && (
           <>
             <DogTable
               rows={currentDogsResults}
@@ -55,6 +63,7 @@ export const DogSearch = () => {
               favoritedDogs={favoritedDogs}
               setFavoritedDogs={setFavoritedDogs}
               setCurrentDogsResults={setCurrentDogsResults}
+              isLoading={isLoading}
             />
             <FilterPanel
               dogBreedList={dogBreedList}

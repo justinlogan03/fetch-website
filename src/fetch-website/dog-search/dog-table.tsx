@@ -7,7 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
+
 import { DogsObject } from "./apis/get-dogs";
 import { Order } from "../types";
 import { EnhancedTableToolbar } from "./dog-table-components.tsx/enhanced-table-toolbar";
@@ -25,6 +25,7 @@ type DogTableProps = {
   favoritedDogs: DogsObject[];
   setFavoritedDogs: React.Dispatch<React.SetStateAction<DogsObject[]>>;
   setCurrentDogsResults: React.Dispatch<React.SetStateAction<DogsObject[]>>;
+  isLoading: boolean;
 };
 
 export const DogTable = ({
@@ -34,6 +35,7 @@ export const DogTable = ({
   favoritedDogs,
   setFavoritedDogs,
   setCurrentDogsResults,
+  isLoading, //TODO - add loading state
 }: DogTableProps) => {
   const rowsPerPage = 25;
   const [order, setOrder] = React.useState<Order>("asc");
@@ -71,6 +73,7 @@ export const DogTable = ({
     <Box sx={{ width: "66.66%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar />
+
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
