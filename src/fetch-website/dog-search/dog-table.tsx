@@ -8,8 +8,6 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import { DogsObject } from "./apis/get-dogs";
 import { Order } from "../types";
 import { getComparator } from "./helpers/dog-table-helpers";
@@ -26,8 +24,7 @@ export default function DogTable({ rows }: DogTableProps) {
   const [orderBy, setOrderBy] = React.useState<keyof DogsObject>("name");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -77,10 +74,6 @@ export default function DogTable({ rows }: DogTableProps) {
     setPage(0);
   };
 
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
-  };
-
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -94,14 +87,14 @@ export default function DogTable({ rows }: DogTableProps) {
   );
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "66.66%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
+            size={"medium"}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -154,7 +147,7 @@ export default function DogTable({ rows }: DogTableProps) {
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: 53 * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />
@@ -173,10 +166,6 @@ export default function DogTable({ rows }: DogTableProps) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </Box>
   );
 }
