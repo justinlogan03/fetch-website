@@ -13,26 +13,16 @@ import { visuallyHidden } from "@mui/utils";
 import { getHeadCells } from "../helpers/dog-table-helpers";
 
 interface EnhancedTableProps {
-  numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
     property: keyof DogsObject
   ) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
   orderBy: string;
-  rowCount: number;
 }
 
 export const EnhancedTableHead = (props: EnhancedTableProps) => {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler =
     (property: keyof DogsObject) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
@@ -42,15 +32,7 @@ export const EnhancedTableHead = (props: EnhancedTableProps) => {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all desserts",
-            }}
-          />
+          {/** empty cell for padding */}
         </TableCell>
         {getHeadCells().map((headCell) => (
           <TableCell

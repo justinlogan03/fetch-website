@@ -1,14 +1,25 @@
 import { DogsObject, getDogs } from "../apis/get-dogs";
-import { getDogsSearch } from "../apis/get-dogs-search";
+import { DogSearchResults, getDogsSearch } from "../apis/get-dogs-search";
+import { getPaginatedDogsSearch } from "../apis/get-paginated-dogs-search";
 
-export const searchDogs = async () => {
-  let dogs: DogsObject[] = [];
-  const dogIds = await getDogsSearch();
-  if (!dogIds.isError) {
-    const dogsRes = await getDogs(dogIds.value.resultIds);
+export const searchDogs = async (
+  dogBreedFilters: string[],
+  paginatedUrl?: string
+) => {
+  let dogIds: DogSearchResults = {
+    resultIds: [],
+    total: 0,
+  };
+  let dogsObject: DogsObject[] = [];
+  const dogIdsRes = paginatedUrl
+    ? await getPaginatedDogsSearch(paginatedUrl)
+    : await getDogsSearch(dogBreedFilters);
+  if (!dogIdsRes.isError) {
+    dogIds = dogIdsRes.value;
+    const dogsRes = await getDogs(dogIdsRes.value.resultIds);
     if (!dogsRes.isError) {
-      dogs = dogsRes.value;
+      dogsObject = dogsRes.value;
     }
   }
-  return dogs;
+  return { dogIds, dogsObject };
 };

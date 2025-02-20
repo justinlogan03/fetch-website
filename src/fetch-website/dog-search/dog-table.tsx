@@ -7,30 +7,43 @@ import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
+
 import { DogsObject } from "./apis/get-dogs";
 import { Order } from "../types";
-import { getComparator } from "./helpers/dog-table-helpers";
 import { EnhancedTableToolbar } from "./dog-table-components.tsx/enhanced-table-toolbar";
 import { EnhancedTableHead } from "./dog-table-components.tsx/enhanced-table-header";
 import { ImageCell } from "./dog-table-components.tsx/image-cell";
 
+import { DogSearchResults } from "./apis/get-dogs-search";
+import { searchDogs } from "./helpers/search-dogs";
+import { HeartCell } from "./dog-table-components.tsx/heart-cell";
+
 type DogTableProps = {
   rows: DogsObject[];
+  dogIdsObject: DogSearchResults;
+  setDogIdsObject: React.Dispatch<React.SetStateAction<DogSearchResults>>;
+  favoritedDogs: DogsObject[];
+  setFavoritedDogs: React.Dispatch<React.SetStateAction<DogsObject[]>>;
+  setCurrentDogsResults: React.Dispatch<React.SetStateAction<DogsObject[]>>;
+  isLoading: boolean;
 };
 
-export default function DogTable({ rows }: DogTableProps) {
+export const DogTable = ({
+  rows,
+  dogIdsObject,
+  setDogIdsObject,
+  favoritedDogs,
+  setFavoritedDogs,
+  setCurrentDogsResults,
+  isLoading, //TODO - add loading state
+}: DogTableProps) => {
+  const rowsPerPage = 25;
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof DogsObject>("name");
-  const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
+    _event: React.MouseEvent<unknown>,
     property: keyof DogsObject
   ) => {
     const isAsc = orderBy === property && order === "asc";
@@ -38,102 +51,51 @@ export default function DogTable({ rows }: DogTableProps) {
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
-      setSelected(newSelected);
-      return;
+  const handleChangePage = async (_event: unknown, newPage: number) => {
+    // page down
+    if (page > newPage) {
+      const pageDownRes = await searchDogs([], dogIdsObject.prev);
+      setDogIdsObject(pageDownRes.dogIds);
+      setCurrentDogsResults(pageDownRes.dogsObject);
+    } else if (page < newPage) {
+      const pageUpRes = await searchDogs([], dogIdsObject.next);
+      setDogIdsObject(pageUpRes.dogIds);
+      setCurrentDogsResults(pageUpRes.dogsObject);
     }
-    setSelected([]);
-  };
-
-  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: readonly string[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-    setSelected(newSelected);
-  };
-
-  const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-  const visibleRows = React.useMemo(
-    () =>
-      [...rows]
-        .sort(getComparator(order, orderBy))
-        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage]
-  );
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dogIdsObject.total) : 0;
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "66.66%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar />
+
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
+            size={"medium"}
           >
             <EnhancedTableHead
-              numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
             />
             <TableBody>
-              {visibleRows.map((row, index) => {
-                const isItemSelected = selected.includes(row.id);
+              {rows.map((row, index) => {
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row.id)}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={isItemSelected}
-                    sx={{ cursor: "pointer" }}
-                  >
+                  <TableRow tabIndex={-1} key={row.id}>
                     <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
+                      <HeartCell
+                        currentDog={row}
+                        favoritedDogs={favoritedDogs}
+                        setFavoritedDogs={setFavoritedDogs}
                       />
                     </TableCell>
                     <TableCell
@@ -154,7 +116,7 @@ export default function DogTable({ rows }: DogTableProps) {
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: 53 * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />
@@ -164,19 +126,14 @@ export default function DogTable({ rows }: DogTableProps) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[]}
           component="div"
-          count={rows.length}
+          count={dogIdsObject.total}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </Box>
   );
-}
+};
