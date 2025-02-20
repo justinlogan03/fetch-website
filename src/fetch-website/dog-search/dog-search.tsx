@@ -5,9 +5,14 @@ import { DogsObject } from "./apis/get-dogs";
 import DogTable from "./dog-table";
 import { getDogsBreeds } from "./apis/get-dogs-breeds";
 import { FilterPanel } from "./dog-table-components.tsx/filter-panel";
+import { DogSearchResults } from "./apis/get-dogs-search";
 
 export const DogSearch = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false); // TODO - build out better loading state
+  const [dogIdsObject, setDogIdsObject] = useState<DogSearchResults>({
+    resultIds: [],
+    total: 0,
+  });
   const [currentDogsResults, setCurrentDogsResults] = useState<DogsObject[]>(
     []
   );
@@ -29,7 +34,8 @@ export const DogSearch = () => {
     setIsLoading(true);
     searchDogs(dogBreedFilters)
       .then((res) => {
-        setCurrentDogsResults(res);
+        setDogIdsObject(res.dogIds);
+        setCurrentDogsResults(res.dogsObject);
       })
       .finally(() => {
         setIsLoading(false);
@@ -41,7 +47,12 @@ export const DogSearch = () => {
       <div className="mx-auto p-24 flex gap-4">
         {!isLoading && dogBreedList !== null && (
           <>
-            <DogTable rows={currentDogsResults} />
+            <DogTable
+              rows={currentDogsResults}
+              dogIdsObject={dogIdsObject}
+              setDogIdsObject={setDogIdsObject}
+              setCurrentDogsResults={setCurrentDogsResults}
+            />
             <FilterPanel
               dogBreedList={dogBreedList}
               dogBreedFilters={dogBreedFilters}

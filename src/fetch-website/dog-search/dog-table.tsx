@@ -15,19 +15,30 @@ import { EnhancedTableToolbar } from "./dog-table-components.tsx/enhanced-table-
 import { EnhancedTableHead } from "./dog-table-components.tsx/enhanced-table-header";
 import { ImageCell } from "./dog-table-components.tsx/image-cell";
 
+import { DogSearchResults } from "./apis/get-dogs-search";
+import { searchDogs } from "./helpers/search-dogs";
+
 type DogTableProps = {
   rows: DogsObject[];
+  dogIdsObject: DogSearchResults;
+  setDogIdsObject: React.Dispatch<React.SetStateAction<DogSearchResults>>;
+  setCurrentDogsResults: React.Dispatch<React.SetStateAction<DogsObject[]>>;
 };
 
-export default function DogTable({ rows }: DogTableProps) {
+export default function DogTable({
+  rows,
+  dogIdsObject,
+  setDogIdsObject,
+  setCurrentDogsResults,
+}: DogTableProps) {
+  const rowsPerPage = 25;
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof DogsObject>("name");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
   const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
+    _event: React.MouseEvent<unknown>,
     property: keyof DogsObject
   ) => {
     const isAsc = orderBy === property && order === "asc";
@@ -63,28 +74,23 @@ export default function DogTable({ rows }: DogTableProps) {
     setSelected(newSelected);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = async (_event: unknown, newPage: number) => {
+    // page down
+    if (page > newPage) {
+      const pageDownRes = await searchDogs([], dogIdsObject.prev);
+      setDogIdsObject(pageDownRes.dogIds);
+      setCurrentDogsResults(pageDownRes.dogsObject);
+    } else if (page < newPage) {
+      const pageUpRes = await searchDogs([], dogIdsObject.next);
+      setDogIdsObject(pageUpRes.dogIds);
+      setCurrentDogsResults(pageUpRes.dogsObject);
+    }
     setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-  const visibleRows = React.useMemo(
-    () =>
-      [...rows]
-        .sort(getComparator(order, orderBy))
-        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage]
-  );
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dogIdsObject.total) : 0;
 
   return (
     <Box sx={{ width: "66.66%" }}>
@@ -102,10 +108,10 @@ export default function DogTable({ rows }: DogTableProps) {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={dogIdsObject.total}
             />
             <TableBody>
-              {visibleRows.map((row, index) => {
+              {rows.map((row, index) => {
                 const isItemSelected = selected.includes(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -157,13 +163,12 @@ export default function DogTable({ rows }: DogTableProps) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[]}
           component="div"
-          count={rows.length}
+          count={dogIdsObject.total}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
     </Box>

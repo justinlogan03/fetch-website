@@ -1,12 +1,10 @@
 import { ErrorResponse } from "../../types";
 
-// TODO - allow props to maximize search
-
 export type DogSearchResults = {
   resultIds: string[];
   total: number;
   next?: string;
-  prv?: string;
+  prev?: string;
 };
 
 export const getDogsSearch = async (
@@ -23,13 +21,11 @@ export const getDogsSearch = async (
       credentials: "include",
     });
     const dogSearch = await dogsSearchRes.json();
-    console.log(dogSearch);
     return {
       isError: false,
       value: dogSearch,
     };
   } catch (error) {
-    console.log(error);
     return { isError: true, error };
   }
 };
