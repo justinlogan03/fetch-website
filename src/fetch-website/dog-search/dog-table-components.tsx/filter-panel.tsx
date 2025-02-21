@@ -1,5 +1,7 @@
 import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import * as React from "react";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import { PrimaryHeader } from "../../common-components/primary-header";
 
 type FilterPanelProps = {
   dogBreedList: string[];
@@ -13,10 +15,13 @@ export const FilterPanel = ({
   setDogBreedFilters,
 }: FilterPanelProps) => {
   return (
-    <div className=" w-2/6 bg-white  rounded">
-      <h1 className="m-4 text-xl">Filters</h1>
+    <div className="w-2/6 bg-white rounded">
+      <PrimaryHeader
+        icon={<FilterListIcon fontSize="large" />}
+        label={"Filters"}
+      />
       <h3 className="m-4">Dog Breeds</h3>
-      <div className="m-4">
+      <div className="m-4 overflow-y-scroll" style={{ maxHeight: "50vh" }}>
         <FormGroup>
           {dogBreedList.map((breed) => {
             return (

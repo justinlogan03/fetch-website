@@ -10,13 +10,14 @@ import Paper from "@mui/material/Paper";
 
 import { DogsObject } from "./apis/get-dogs";
 import { Order } from "../types";
-import { EnhancedTableToolbar } from "./dog-table-components.tsx/enhanced-table-toolbar";
+import PetsIcon from "@mui/icons-material/Pets";
 import { EnhancedTableHead } from "./dog-table-components.tsx/enhanced-table-header";
 import { ImageCell } from "./dog-table-components.tsx/image-cell";
 
 import { DogSearchResults } from "./apis/get-dogs-search";
 import { searchDogs } from "./helpers/search-dogs";
 import { HeartCell } from "./dog-table-components.tsx/heart-cell";
+import { PrimaryHeader } from "../common-components/primary-header";
 
 type DogTableProps = {
   rows: DogsObject[];
@@ -25,7 +26,6 @@ type DogTableProps = {
   favoritedDogs: DogsObject[];
   setFavoritedDogs: React.Dispatch<React.SetStateAction<DogsObject[]>>;
   setCurrentDogsResults: React.Dispatch<React.SetStateAction<DogsObject[]>>;
-  isLoading: boolean;
 };
 
 export const DogTable = ({
@@ -35,7 +35,6 @@ export const DogTable = ({
   favoritedDogs,
   setFavoritedDogs,
   setCurrentDogsResults,
-  isLoading, //TODO - add loading state
 }: DogTableProps) => {
   const rowsPerPage = 25;
   const [order, setOrder] = React.useState<Order>("asc");
@@ -72,8 +71,10 @@ export const DogTable = ({
   return (
     <Box sx={{ width: "66.66%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar />
-
+        <PrimaryHeader
+          icon={<PetsIcon fontSize="large" />}
+          label={"Available Dogs"}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -85,7 +86,7 @@ export const DogTable = ({
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
             />
-            <TableBody>
+            <TableBody style={{ maxHeight: "100vh" }}>
               {rows.map((row, index) => {
                 const labelId = `enhanced-table-checkbox-${index}`;
 

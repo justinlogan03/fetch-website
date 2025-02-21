@@ -6,11 +6,14 @@ import { DogTable } from "./dog-table";
 import { getDogsBreeds } from "./apis/get-dogs-breeds";
 import { FilterPanel } from "./dog-table-components.tsx/filter-panel";
 import { DogSearchResults } from "./apis/get-dogs-search";
-import { ImageCell } from "./dog-table-components.tsx/image-cell";
 import { MyFavoritesSection } from "./favorited-dogs";
+import { postAuthLogout } from "../login-page/apis/post-auth-logout";
 
-export const DogSearch = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false); // TODO - build out better loading state
+type DogsSearchProps = {
+  setIsLoginSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
   const [dogIdsObject, setDogIdsObject] = useState<DogSearchResults>({
     resultIds: [],
     total: 0,
@@ -34,20 +37,30 @@ export const DogSearch = () => {
   }, []);
 
   useEffect(() => {
-    setIsLoading(true);
-    searchDogs(dogBreedFilters)
-      .then((res) => {
-        setDogIdsObject(res.dogIds);
-        setCurrentDogsResults(res.dogsObject);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    searchDogs(dogBreedFilters).then((res) => {
+      setDogIdsObject(res.dogIds);
+      setCurrentDogsResults(res.dogsObject);
+    });
   }, [dogBreedFilters]);
+
+  const onLogout = async () => {
+    const authLogout = await postAuthLogout();
+    if (authLogout.isSuccess) {
+      setIsLoginSuccess(false);
+    }
+  };
 
   return (
     <div className="">
-      <div className="flex px-24 pt-12">
+      <div className="flex">
+        <button
+          className="ml-auto mr-8 mt-2 hover:underline"
+          onClick={onLogout}
+        >
+          Logout
+        </button>
+      </div>
+      <div className="flex px-24 pt-8">
         <MyFavoritesSection
           favoritedDogs={favoritedDogs}
           setFavoritedDogs={setFavoritedDogs}
@@ -63,7 +76,6 @@ export const DogSearch = () => {
               favoritedDogs={favoritedDogs}
               setFavoritedDogs={setFavoritedDogs}
               setCurrentDogsResults={setCurrentDogsResults}
-              isLoading={isLoading}
             />
             <FilterPanel
               dogBreedList={dogBreedList}
