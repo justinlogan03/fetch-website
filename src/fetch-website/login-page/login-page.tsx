@@ -4,6 +4,7 @@ import { PrimaryButton, SecondaryButton } from "../common-components/buttons";
 
 import { postAuthLogin } from "./apis/post-auth-login";
 import { PrimaryField } from "../common-components/primary-field";
+import { PrimaryHeader } from "../common-components/primary-header";
 
 type Props = {
   setIsLoginSuccess: Dispatch<SetStateAction<boolean>>;
@@ -37,26 +38,26 @@ export const LoginPage = ({ setIsLoginSuccess }: Props) => {
   };
 
   return (
-    <div className="grid py-20 px-28 gap-y-12 bg-blue-100 w-128 rounded">
-      <div className="flex mx-auto text-2xl ">
-        <PetsIcon fontSize="large" />
-        <h1 className="font-bold ml-2 my-auto">Login</h1>
-      </div>
-      <PrimaryField
-        label="Name"
-        setString={setName}
-        hasError={isLoginError}
-        value={name}
-      />
-      <PrimaryField
-        label="Email"
-        setString={setEmail}
-        hasError={isLoginError}
-        value={email}
-      />
-      <div className="flex gap-x-4 mx-auto">
-        <PrimaryButton label={"Submit"} onClick={onSubmit} />
-        <SecondaryButton label={"Reset"} onClick={onReset} />
+    <div>
+      <PrimaryHeader icon={<PetsIcon fontSize="large" />} label="Login" />
+
+      <div className="grid py-20 px-28 gap-y-12 bg-white w-128 rounded">
+        <PrimaryField
+          label="Name"
+          setString={setName}
+          hasError={isLoginError}
+          value={name}
+        />
+        <PrimaryField
+          label="Email"
+          setString={setEmail}
+          hasError={isLoginError}
+          value={email}
+        />
+        <div className="flex gap-x-4 mx-auto">
+          <PrimaryButton label={"Submit"} onClick={onSubmit} />
+          <SecondaryButton label={"Reset"} onClick={onReset} />
+        </div>
       </div>
     </div>
   );

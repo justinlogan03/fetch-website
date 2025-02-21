@@ -22,7 +22,7 @@ export const FilterPanel = ({
       />
       <h3 className="m-4">Dog Breeds</h3>
       <div className="m-4 overflow-y-scroll" style={{ maxHeight: "50vh" }}>
-        <FormGroup>
+        <FormGroup className="ml-4">
           {dogBreedList.map((breed) => {
             return (
               <FormControlLabel

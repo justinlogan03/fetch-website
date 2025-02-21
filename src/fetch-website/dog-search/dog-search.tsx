@@ -54,7 +54,7 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
     <div className="">
       <div className="flex">
         <button
-          className="ml-auto mr-8 mt-2 hover:underline"
+          className="ml-auto mr-8 mt-2 hover:underline font-bold"
           onClick={onLogout}
         >
           Logout

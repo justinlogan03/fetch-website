@@ -90,7 +90,7 @@ export const MyFavoritesSection = ({
           ) : (
             <div className="flex">
               <div className="mx-auto my-4">
-                Select dogs to add to your favorites!
+                Select a dog to add to your favorites!
               </div>
             </div>
           )}
