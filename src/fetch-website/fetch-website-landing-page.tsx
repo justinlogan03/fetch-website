@@ -7,7 +7,7 @@ export const FetchWebsiteLandingPage = () => {
   return (
     <div className=" bg-slate-500 my-auto" style={{ minHeight: "100vh" }}>
       {isLoginSuccess ? (
-        <DogSearch />
+        <DogSearch setIsLoginSuccess={setIsLoginSuccess} />
       ) : (
         <div className="p-64 my-auto">
           <LoginPage setIsLoginSuccess={setIsLoginSuccess} />

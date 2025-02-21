@@ -5,6 +5,10 @@ import { HeartCell } from "./dog-table-components.tsx/heart-cell";
 import { PrimaryButton } from "../common-components/buttons";
 import { postDogsMatch } from "./apis/post-dogs-match";
 import { useState } from "react";
+import { PrimaryHeader } from "../common-components/primary-header";
+import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
+import { seperateFavorites } from "./helpers/favorited-dogs-helpers";
+import { FavoritedDogsColumn } from "./dog-table-components.tsx/favorited-dogs-column";
 
 type MyFavoritesSectionProps = {
   favoritedDogs: DogsObject[];
@@ -32,18 +36,23 @@ export const MyFavoritesSection = ({
     }
   };
 
+  const { colOne, colTwo, colThree, colFour } =
+    seperateFavorites(favoritedDogs);
+
   return (
     <div className="bg-white rounded w-full">
-      <div className="flex w-full">
-        <h1 className="m-4 text-xl">My Favorites</h1>
-        <div className="my-auto ml-auto mr-4">
+      <PrimaryHeader
+        icon={<VolunteerActivismIcon fontSize="large" />}
+        label={"My Favorites"}
+        button={
           <PrimaryButton
             label="Match"
             onClick={onMatch}
             disabled={!hasFavorites}
           />
-        </div>
-      </div>
+        }
+      />
+
       {!!matchedDog ? (
         <div className="flex my-2">
           <div className="mx-auto flex">
@@ -57,29 +66,32 @@ export const MyFavoritesSection = ({
         <>
           {hasFavorites ? (
             <div className="flex">
-              <ul className="my-12 mx-16">
-                {favoritedDogs.map((dog) => {
-                  return (
-                    <li className="flex my-2">
-                      <div className="my-auto mr-2">
-                        <HeartCell
-                          currentDog={dog}
-                          favoritedDogs={favoritedDogs}
-                          setFavoritedDogs={setFavoritedDogs}
-                        />
-                      </div>
-                      <div className="my-auto mr-4">
-                        <ImageCell alt={dog.name} imgUrl={dog.img} />
-                      </div>
-                      <span className=" my-auto">{dog.name}</span>
-                    </li>
-                  );
-                })}
-              </ul>
+              <FavoritedDogsColumn
+                dogColumn={colOne}
+                favoritedDogs={favoritedDogs}
+                setFavoritedDogs={setFavoritedDogs}
+              />
+              <FavoritedDogsColumn
+                dogColumn={colTwo}
+                favoritedDogs={favoritedDogs}
+                setFavoritedDogs={setFavoritedDogs}
+              />
+              <FavoritedDogsColumn
+                dogColumn={colThree}
+                favoritedDogs={favoritedDogs}
+                setFavoritedDogs={setFavoritedDogs}
+              />
+              <FavoritedDogsColumn
+                dogColumn={colFour}
+                favoritedDogs={favoritedDogs}
+                setFavoritedDogs={setFavoritedDogs}
+              />
             </div>
           ) : (
             <div className="flex">
-              <div className="mx-auto my-4">No Favorites</div>
+              <div className="mx-auto my-4">
+                Select a dog to add to your favorites!
+              </div>
             </div>
           )}
         </>
