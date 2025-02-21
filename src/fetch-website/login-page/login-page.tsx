@@ -40,8 +40,7 @@ export const LoginPage = ({ setIsLoginSuccess }: Props) => {
   return (
     <div>
       <PrimaryHeader icon={<PetsIcon fontSize="large" />} label="Login" />
-
-      <div className="grid py-20 px-28 gap-y-12 bg-white w-128 rounded">
+      <div className="grid py-20 px-28 gap-y-12 bg-white w-128 rounded-b">
         <PrimaryField
           label="Name"
           setString={setName}
