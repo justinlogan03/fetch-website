@@ -29,6 +29,7 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof DogsObject>("breed");
   const [matchedDog, setMatchedDog] = useState<DogsObject | null>(null);
+  const [ageRange, setAgeRange] = useState<number[]>([0, 15]); // TODO - elevate this to send to API
 
   useEffect(() => {
     //fetch dog breed list on initial load
@@ -42,11 +43,11 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
   }, []);
 
   useEffect(() => {
-    searchDogs({ dogBreedFilters, order, orderBy }).then((res) => {
+    searchDogs({ dogBreedFilters, order, orderBy, ageRange }).then((res) => {
       setDogIdsObject(res.dogIds);
       setCurrentDogsResults(res.dogsObject);
     });
-  }, [dogBreedFilters, order, orderBy]);
+  }, [dogBreedFilters, order, orderBy, ageRange]);
 
   return (
     <div className="">
@@ -81,6 +82,8 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
               dogBreedList={dogBreedList}
               dogBreedFilters={dogBreedFilters}
               setDogBreedFilters={setDogBreedFilters}
+              ageRange={ageRange}
+              setAgeRange={setAgeRange}
             />
           </>
         )}

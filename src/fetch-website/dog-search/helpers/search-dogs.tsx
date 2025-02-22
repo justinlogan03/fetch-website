@@ -5,6 +5,7 @@ import { getPaginatedDogsSearch } from "../apis/get-paginated-dogs-search";
 
 type searchDogsProps = {
   dogBreedFilters: string[];
+  ageRange?: number[];
   order?: Order;
   orderBy?: keyof DogsObject;
   paginatedUrl?: string;
@@ -12,6 +13,7 @@ type searchDogsProps = {
 
 export const searchDogs = async ({
   dogBreedFilters,
+  ageRange = [0, 15],
   order,
   orderBy,
   paginatedUrl,
@@ -23,7 +25,7 @@ export const searchDogs = async ({
   let dogsObject: DogsObject[] = [];
   const dogIdsRes = paginatedUrl
     ? await getPaginatedDogsSearch(paginatedUrl)
-    : await getDogsSearch(dogBreedFilters, order, orderBy);
+    : await getDogsSearch(dogBreedFilters, ageRange, order, orderBy);
   if (!dogIdsRes.isError) {
     dogIds = dogIdsRes.value;
     const dogsRes = await getDogs(dogIdsRes.value.resultIds);

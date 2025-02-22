@@ -9,15 +9,17 @@ type FilterPanelProps = {
   dogBreedList: string[];
   dogBreedFilters: string[];
   setDogBreedFilters: React.Dispatch<React.SetStateAction<string[]>>;
+  ageRange: number[];
+  setAgeRange: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
 export const FilterPanel = ({
   dogBreedList,
   dogBreedFilters,
   setDogBreedFilters,
+  ageRange,
+  setAgeRange,
 }: FilterPanelProps) => {
-  const [ageRange, setAgeRange] = useState<number[]>([0, 15]); // TODO - elevate this to send to API
-
   return (
     <div className="w-2/6 bg-white rounded" style={{ maxHeight: "100vh" }}>
       <PrimaryHeader
