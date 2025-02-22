@@ -7,7 +7,9 @@ import { getDogsBreeds } from "./apis/get-dogs-breeds";
 import { FilterPanel } from "./dog-table-components.tsx/filter-panel";
 import { DogSearchResults } from "./apis/get-dogs-search";
 import { MyFavoritesSection } from "./favorited-dogs";
-import { postAuthLogout } from "../login-page/apis/post-auth-logout";
+
+import { LogoutButton } from "./logout-button";
+import { Order } from "../types";
 
 type DogsSearchProps = {
   setIsLoginSuccess: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,6 +26,9 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
   const [dogBreedList, setDogBreedList] = useState<string[] | null>(null);
   const [dogBreedFilters, setDogBreedFilters] = useState<string[]>([]);
   const [favoritedDogs, setFavoritedDogs] = useState<DogsObject[]>([]);
+  const [order, setOrder] = useState<Order>("asc");
+  const [orderBy, setOrderBy] = useState<keyof DogsObject>("breed");
+  const [matchedDog, setMatchedDog] = useState<DogsObject | null>(null);
 
   useEffect(() => {
     //fetch dog breed list on initial load
@@ -37,33 +42,23 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
   }, []);
 
   useEffect(() => {
-    searchDogs(dogBreedFilters).then((res) => {
+    searchDogs({ dogBreedFilters, order, orderBy }).then((res) => {
       setDogIdsObject(res.dogIds);
       setCurrentDogsResults(res.dogsObject);
     });
-  }, [dogBreedFilters]);
-
-  const onLogout = async () => {
-    const authLogout = await postAuthLogout();
-    if (authLogout.isSuccess) {
-      setIsLoginSuccess(false);
-    }
-  };
+  }, [dogBreedFilters, order, orderBy]);
 
   return (
     <div className="">
       <div className="flex">
-        <button
-          className="ml-auto mr-8 mt-2 hover:underline font-bold"
-          onClick={onLogout}
-        >
-          Logout
-        </button>
+        <LogoutButton setIsLoginSuccess={setIsLoginSuccess} />
       </div>
       <div className="flex px-24 pt-8">
         <MyFavoritesSection
           favoritedDogs={favoritedDogs}
           setFavoritedDogs={setFavoritedDogs}
+          matchedDog={matchedDog}
+          setMatchedDog={setMatchedDog}
         />
       </div>
       <div className="mx-auto px-24 pt-4 pb-12 flex gap-4">
@@ -76,6 +71,11 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
               favoritedDogs={favoritedDogs}
               setFavoritedDogs={setFavoritedDogs}
               setCurrentDogsResults={setCurrentDogsResults}
+              order={order}
+              setOrder={setOrder}
+              orderBy={orderBy}
+              setOrderBy={setOrderBy}
+              matchedDog={matchedDog}
             />
             <FilterPanel
               dogBreedList={dogBreedList}

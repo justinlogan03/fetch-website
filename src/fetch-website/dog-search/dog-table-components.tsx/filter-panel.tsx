@@ -20,7 +20,7 @@ export const FilterPanel = ({
         icon={<FilterListIcon fontSize="large" />}
         label={"Filters"}
       />
-      <h3 className="m-4">Dog Breeds</h3>
+      <h3 className="p-4 font-bold bg-gray-100">Dog Breeds</h3>
       <div className="m-4 overflow-y-scroll" style={{ maxHeight: "50vh" }}>
         <FormGroup className="ml-4">
           {dogBreedList.map((breed) => {

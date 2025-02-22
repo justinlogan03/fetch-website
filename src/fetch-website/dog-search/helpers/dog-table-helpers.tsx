@@ -17,30 +17,35 @@ export const getHeadCells = () => {
       numeric: false,
       disablePadding: true,
       label: "Photo",
+      sortable: false,
     },
     {
       id: "name",
       numeric: false,
       disablePadding: false,
       label: "Name",
+      sortable: true,
     },
     {
       id: "breed",
       numeric: false,
       disablePadding: false,
       label: "Breed",
+      sortable: true,
     },
     {
       id: "age",
       numeric: false,
       disablePadding: false,
       label: "Age",
+      sortable: true,
     },
     {
       id: "zip_code",
       numeric: false,
       disablePadding: false,
       label: "Zip Code",
+      sortable: false,
     },
   ];
   return headCells;

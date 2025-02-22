@@ -26,6 +26,11 @@ type DogTableProps = {
   favoritedDogs: DogsObject[];
   setFavoritedDogs: React.Dispatch<React.SetStateAction<DogsObject[]>>;
   setCurrentDogsResults: React.Dispatch<React.SetStateAction<DogsObject[]>>;
+  order: Order;
+  setOrder: React.Dispatch<React.SetStateAction<Order>>;
+  orderBy: keyof DogsObject;
+  setOrderBy: React.Dispatch<React.SetStateAction<keyof DogsObject>>;
+  matchedDog: DogsObject | null;
 };
 
 export const DogTable = ({
@@ -35,10 +40,13 @@ export const DogTable = ({
   favoritedDogs,
   setFavoritedDogs,
   setCurrentDogsResults,
+  order,
+  setOrder,
+  orderBy,
+  setOrderBy,
+  matchedDog,
 }: DogTableProps) => {
   const rowsPerPage = 25;
-  const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof DogsObject>("name");
   const [page, setPage] = React.useState(0);
 
   const handleRequestSort = (
@@ -53,11 +61,17 @@ export const DogTable = ({
   const handleChangePage = async (_event: unknown, newPage: number) => {
     // page down
     if (page > newPage) {
-      const pageDownRes = await searchDogs([], dogIdsObject.prev);
+      const pageDownRes = await searchDogs({
+        dogBreedFilters: [],
+        paginatedUrl: dogIdsObject.prev,
+      });
       setDogIdsObject(pageDownRes.dogIds);
       setCurrentDogsResults(pageDownRes.dogsObject);
     } else if (page < newPage) {
-      const pageUpRes = await searchDogs([], dogIdsObject.next);
+      const pageUpRes = await searchDogs({
+        dogBreedFilters: [],
+        paginatedUrl: dogIdsObject.next,
+      });
       setDogIdsObject(pageUpRes.dogIds);
       setCurrentDogsResults(pageUpRes.dogsObject);
     }
@@ -97,6 +111,7 @@ export const DogTable = ({
                         currentDog={row}
                         favoritedDogs={favoritedDogs}
                         setFavoritedDogs={setFavoritedDogs}
+                        hasMatch={!!matchedDog}
                       />
                     </TableCell>
                     <TableCell

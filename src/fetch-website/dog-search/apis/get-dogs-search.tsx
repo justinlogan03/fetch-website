@@ -1,4 +1,5 @@
-import { ErrorResponse } from "../../types";
+import { ErrorResponse, Order } from "../../types";
+import { DogsObject } from "./get-dogs";
 
 export type DogSearchResults = {
   resultIds: string[];
@@ -8,11 +9,16 @@ export type DogSearchResults = {
 };
 
 export const getDogsSearch = async (
-  dogBreedFilters: string[]
+  dogBreedFilters: string[],
+  order?: Order,
+  orderBy?: keyof DogsObject
 ): Promise<ErrorResponse<DogSearchResults>> => {
   let url = `https://frontend-take-home-service.fetch.com/dogs/search/`;
   if (dogBreedFilters.length > 0) {
     url = `${url}?breeds[]=${dogBreedFilters.join("&breeds[]=")}`;
+  }
+  if (order && orderBy) {
+    url = `${url}?sort=${orderBy}:${order}`;
   }
   try {
     const dogsSearchRes = await fetch(url, {

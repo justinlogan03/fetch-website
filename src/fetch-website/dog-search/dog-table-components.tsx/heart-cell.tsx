@@ -7,16 +7,27 @@ type HeartCellProps = {
   currentDog: DogsObject;
   favoritedDogs: DogsObject[];
   setFavoritedDogs: React.Dispatch<React.SetStateAction<DogsObject[]>>;
+  hasMatch?: boolean;
 };
 
 export const HeartCell = ({
   currentDog,
   favoritedDogs,
   setFavoritedDogs,
+  hasMatch = false,
 }: HeartCellProps) => {
   const isFavorited = favoritedDogs.find((dog) => {
     return dog.id === currentDog.id;
   });
+
+  if (hasMatch) {
+    return (
+      <div className="p-2 m-2 rounded-full">
+        <FavoriteIcon className="text-gray-300" />
+      </div>
+    );
+  }
+
   return (
     <button
       className="p-2 m-2 hover:bg-blue-100 rounded-full"
