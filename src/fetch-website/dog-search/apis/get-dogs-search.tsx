@@ -10,16 +10,23 @@ export type DogSearchResults = {
 
 export const getDogsSearch = async (
   dogBreedFilters: string[],
+  ageRange: number[],
   order?: Order,
   orderBy?: keyof DogsObject
 ): Promise<ErrorResponse<DogSearchResults>> => {
-  let url = `https://frontend-take-home-service.fetch.com/dogs/search/`;
-  if (dogBreedFilters.length > 0) {
-    url = `${url}?breeds[]=${dogBreedFilters.join("&breeds[]=")}`;
+  const hasOrder = order && orderBy;
+  const hasBreedFilter = dogBreedFilters.length > 0;
+  const ageMin = ageRange?.[0] ?? 0;
+  const ageMax = ageRange?.[1] ?? 100;
+
+  let url = `https://frontend-take-home-service.fetch.com/dogs/search/?ageMin=${ageMin}&ageMax=${ageMax}`;
+  if (hasBreedFilter) {
+    url = `${url}&breeds[]=${dogBreedFilters.join("&breeds[]=")}`;
   }
-  if (order && orderBy) {
-    url = `${url}?sort=${orderBy}:${order}`;
+  if (hasOrder) {
+    url = `${url}&sort=${orderBy}:${order}`;
   }
+  console.log(url);
   try {
     const dogsSearchRes = await fetch(url, {
       method: "get",
@@ -27,6 +34,7 @@ export const getDogsSearch = async (
       credentials: "include",
     });
     const dogSearch = await dogsSearchRes.json();
+    console.log(dogSearch);
     return {
       isError: false,
       value: dogSearch,
