@@ -1,7 +1,9 @@
-import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import { Checkbox, FormControlLabel, FormGroup, Slider } from "@mui/material";
 import * as React from "react";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { PrimaryHeader } from "../../common-components/primary-header";
+import { useState } from "react";
+import { AgeRangeFilter } from "./age-range-filter";
 
 type FilterPanelProps = {
   dogBreedList: string[];
@@ -14,14 +16,20 @@ export const FilterPanel = ({
   dogBreedFilters,
   setDogBreedFilters,
 }: FilterPanelProps) => {
+  const [ageRange, setAgeRange] = useState<number[]>([0, 15]); // TODO - elevate this to send to API
+
   return (
-    <div className="w-2/6 bg-white rounded">
+    <div className="w-2/6 bg-white rounded" style={{ maxHeight: "100vh" }}>
       <PrimaryHeader
         icon={<FilterListIcon fontSize="large" />}
         label={"Filters"}
       />
-      <h3 className="p-4 font-bold bg-gray-100">Dog Breeds</h3>
-      <div className="m-4 overflow-y-scroll" style={{ maxHeight: "50vh" }}>
+      <h3 className="p-4 font-bold bg-gray-100 border">Age Range</h3>
+      <div className="my-4 mx-12">
+        <AgeRangeFilter ageRange={ageRange} setAgeRange={setAgeRange} />
+      </div>
+      <h3 className="p-4 font-bold bg-gray-100 border">Dog Breeds</h3>
+      <div className="m-4 overflow-y-scroll" style={{ maxHeight: "75vh" }}>
         <FormGroup className="ml-4">
           {dogBreedList.map((breed) => {
             return (

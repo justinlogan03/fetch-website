@@ -3,7 +3,7 @@ import { DogsObject } from "./apis/get-dogs";
 
 import { PrimaryButton } from "../common-components/buttons";
 import { postDogsMatch } from "./apis/post-dogs-match";
-import { useState } from "react";
+
 import { PrimaryHeader } from "../common-components/primary-header";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import { seperateFavorites } from "./helpers/favorited-dogs-helpers";
