@@ -28,6 +28,7 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
   const [favoritedDogs, setFavoritedDogs] = useState<DogsObject[]>([]);
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof DogsObject>("breed");
+  const [matchedDog, setMatchedDog] = useState<DogsObject | null>(null);
 
   useEffect(() => {
     //fetch dog breed list on initial load
@@ -56,6 +57,8 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
         <MyFavoritesSection
           favoritedDogs={favoritedDogs}
           setFavoritedDogs={setFavoritedDogs}
+          matchedDog={matchedDog}
+          setMatchedDog={setMatchedDog}
         />
       </div>
       <div className="mx-auto px-24 pt-4 pb-12 flex gap-4">
@@ -72,6 +75,7 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
               setOrder={setOrder}
               orderBy={orderBy}
               setOrderBy={setOrderBy}
+              matchedDog={matchedDog}
             />
             <FilterPanel
               dogBreedList={dogBreedList}

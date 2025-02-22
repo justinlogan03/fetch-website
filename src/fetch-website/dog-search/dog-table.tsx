@@ -30,6 +30,7 @@ type DogTableProps = {
   setOrder: React.Dispatch<React.SetStateAction<Order>>;
   orderBy: keyof DogsObject;
   setOrderBy: React.Dispatch<React.SetStateAction<keyof DogsObject>>;
+  matchedDog: DogsObject | null;
 };
 
 export const DogTable = ({
@@ -43,6 +44,7 @@ export const DogTable = ({
   setOrder,
   orderBy,
   setOrderBy,
+  matchedDog,
 }: DogTableProps) => {
   const rowsPerPage = 25;
   const [page, setPage] = React.useState(0);
@@ -109,6 +111,7 @@ export const DogTable = ({
                         currentDog={row}
                         favoritedDogs={favoritedDogs}
                         setFavoritedDogs={setFavoritedDogs}
+                        hasMatch={!!matchedDog}
                       />
                     </TableCell>
                     <TableCell
