@@ -11,4 +11,5 @@ export interface HeadCell {
   id: keyof DogsObject;
   label: string;
   numeric: boolean;
+  sortable: boolean;
 }
