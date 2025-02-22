@@ -19,7 +19,7 @@ export const MatchedDogMessage = ({
   return (
     <div className="flex">
       <div className="mx-auto my-4">
-        <h1 className="font-bold text-xl">{"Congrats on your Match!!!"}</h1>
+        <h1 className="font-bold text-xl">{`Congrats on your match with ${matchedDog.name}!`}</h1>
         <div className="flex">
           <div className="mx-auto mt-4">
             <ImageCell
