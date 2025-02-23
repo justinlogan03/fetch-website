@@ -30,7 +30,7 @@ export const FilterPanel = ({
   const [isDogBreedsOpen, setIsDogBreedsOpen] = useState<boolean>(false);
 
   return (
-    <div className="w-2/6 bg-white rounded" style={{ maxHeight: "100vh" }}>
+    <div className="w-2/6 bg-white rounded" style={{ maxHeight: "110vh" }}>
       <PrimaryHeader
         icon={<FilterListIcon fontSize="large" />}
         label={"Filters"}
@@ -61,7 +61,7 @@ export const FilterPanel = ({
         }
       />
       {isDogBreedsOpen && (
-        <div className="m-4 overflow-y-scroll" style={{ maxHeight: "75vh" }}>
+        <div className="m-4 overflow-y-scroll" style={{ maxHeight: "60vh" }}>
           <FormGroup className="ml-4">
             {dogBreedList.map((breed) => {
               return (
