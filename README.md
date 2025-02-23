@@ -1,6 +1,6 @@
 This repository includes my completed frontend excercise. I've included a link to the latest deployed project and instructions on how to run the project locally. I've also included screenshots of the application for your reference.
 
-Latest Vercel Link (2/23/2025): https://fetch-website-cfhvi0ja9-justin-logans-projects.vercel.app/
+Latest Vercel Link (2/23/2025): https://fetch-website-three.vercel.app/
 
 **Run Project Locally:** <br />
 1.) **Run command to generate css:** npx tailwindcss -i ./input.css -o ./public/output.css --watch <br />
