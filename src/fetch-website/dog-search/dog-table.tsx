@@ -31,6 +31,8 @@ type DogTableProps = {
   orderBy: keyof DogsObject;
   setOrderBy: React.Dispatch<React.SetStateAction<keyof DogsObject>>;
   matchedDog: DogsObject | null;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const DogTable = ({
@@ -45,9 +47,10 @@ export const DogTable = ({
   orderBy,
   setOrderBy,
   matchedDog,
+  page,
+  setPage,
 }: DogTableProps) => {
   const rowsPerPage = 25;
-  const [page, setPage] = React.useState(0);
 
   const handleRequestSort = (
     _event: React.MouseEvent<unknown>,

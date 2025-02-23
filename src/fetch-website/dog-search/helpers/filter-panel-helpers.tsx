@@ -1,10 +1,10 @@
 export const getAgeRangePillLabel = (ageRange: number[]) => {
   const ageMin = ageRange?.[0] ?? null;
   const ageMax = ageRange?.[1] ?? null;
-  console.log(ageRange);
 
   if (ageMin !== null && ageMax !== null) {
-    return `${ageMin} - ${ageMax}`;
+    const maxLabel = ageMax >= 15 ? "15+" : `${ageMax}`;
+    return `${ageMin} - ${maxLabel}`;
   }
   return undefined;
 };

@@ -16,6 +16,7 @@ type DogsSearchProps = {
 };
 
 export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
+  const [dogBreedList, setDogBreedList] = useState<string[] | null>(null);
   const [dogIdsObject, setDogIdsObject] = useState<DogSearchResults>({
     resultIds: [],
     total: 0,
@@ -23,13 +24,15 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
   const [currentDogsResults, setCurrentDogsResults] = useState<DogsObject[]>(
     []
   );
-  const [dogBreedList, setDogBreedList] = useState<string[] | null>(null);
-  const [dogBreedFilters, setDogBreedFilters] = useState<string[]>([]);
   const [favoritedDogs, setFavoritedDogs] = useState<DogsObject[]>([]);
+
+  // table values (filters, order, and pagination)
+  const [dogBreedFilters, setDogBreedFilters] = useState<string[]>([]);
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof DogsObject>("breed");
   const [matchedDog, setMatchedDog] = useState<DogsObject | null>(null);
-  const [ageRange, setAgeRange] = useState<number[]>([0, 15]); // TODO - elevate this to send to API
+  const [ageRange, setAgeRange] = useState<number[]>([0, 15]);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
     //fetch dog breed list on initial load
@@ -43,6 +46,7 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
   }, []);
 
   useEffect(() => {
+    setPage(0); // if filters are used, reset page back to 0
     searchDogs({ dogBreedFilters, order, orderBy, ageRange }).then((res) => {
       setDogIdsObject(res.dogIds);
       setCurrentDogsResults(res.dogsObject);
@@ -77,6 +81,8 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
               orderBy={orderBy}
               setOrderBy={setOrderBy}
               matchedDog={matchedDog}
+              page={page}
+              setPage={setPage}
             />
             <FilterPanel
               dogBreedList={dogBreedList}
