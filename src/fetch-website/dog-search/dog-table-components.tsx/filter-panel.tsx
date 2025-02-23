@@ -30,7 +30,7 @@ export const FilterPanel = ({
   const [isDogBreedsOpen, setIsDogBreedsOpen] = useState<boolean>(false);
 
   return (
-    <div className="w-2/6 bg-white rounded" style={{ maxHeight: "110vh" }}>
+    <div className="w-2/6 bg-white rounded" style={{ maxHeight: "120vh" }}>
       <PrimaryHeader
         icon={<FilterListIcon fontSize="large" />}
         label={"Filters"}
