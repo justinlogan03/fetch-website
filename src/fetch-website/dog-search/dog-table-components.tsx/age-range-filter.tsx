@@ -22,7 +22,7 @@ export const AgeRangeFilter = ({ ageRange, setAgeRange }: AgeRangeProps) => {
     },
     {
       value: 15,
-      label: "15",
+      label: "15+",
     },
   ];
 

@@ -17,9 +17,12 @@ export const getDogsSearch = async (
   const hasOrder = order && orderBy;
   const hasBreedFilter = dogBreedFilters.length > 0;
   const ageMin = ageRange?.[0] ?? 0;
-  const ageMax = ageRange?.[1] ?? 100;
+  const ageMax = ageRange?.[1] ?? 15;
 
-  let url = `https://frontend-take-home-service.fetch.com/dogs/search/?ageMin=${ageMin}&ageMax=${ageMax}`;
+  let url = `https://frontend-take-home-service.fetch.com/dogs/search/?ageMin=${ageMin}`;
+  if (ageMax < 15) {
+    url = `${url}&ageMax=${ageMax}`;
+  }
   if (hasBreedFilter) {
     url = `${url}&breeds[]=${dogBreedFilters.join("&breeds[]=")}`;
   }
