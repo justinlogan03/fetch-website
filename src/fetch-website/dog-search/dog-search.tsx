@@ -30,6 +30,7 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
   const [orderBy, setOrderBy] = useState<keyof DogsObject>("breed");
   const [matchedDog, setMatchedDog] = useState<DogsObject | null>(null);
   const [ageRange, setAgeRange] = useState<number[]>([0, 15]);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
     //fetch dog breed list on initial load
@@ -43,6 +44,7 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
   }, []);
 
   useEffect(() => {
+    setPage(0); // if filters are used, reset page back to 0
     searchDogs({ dogBreedFilters, order, orderBy, ageRange }).then((res) => {
       setDogIdsObject(res.dogIds);
       setCurrentDogsResults(res.dogsObject);
@@ -77,6 +79,8 @@ export const DogSearch = ({ setIsLoginSuccess }: DogsSearchProps) => {
               orderBy={orderBy}
               setOrderBy={setOrderBy}
               matchedDog={matchedDog}
+              page={page}
+              setPage={setPage}
             />
             <FilterPanel
               dogBreedList={dogBreedList}
